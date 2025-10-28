@@ -25,18 +25,21 @@ Você precisa ter instalado:
 
 ---
 
-## 📦 Etapa 1: Clonar e Instalar
+## 📦 Etapa 1: Clonar, Instalar e Criar Branch
 
 ```bash
 # Clone o repositório
 git clone https://github.com/rajssq/ai-code-combat.git
 cd ai-code-combat
 
+# Crie uma nova branch para suas alterações
+git checkout -b nome-da-sua-branch
+
 # Instale as dependências
 npm install
 ```
 
-✅ **Checkpoint:** Você deve ver a pasta `node_modules` criada.
+✅ **Checkpoint:** Você deve ver a pasta node_modules criada e estar na sua nova branch antes de começar as alterações.
 
 ---
 
