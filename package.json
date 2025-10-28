@@ -1,0 +1,25 @@
+{
+  "name": "ai-code-combat",
+  "version": "1.0.0",
+  "description": "Este repositório reúne os arquivos para o projeto *ai-code-combat*.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rajssq/ai-code-combat.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/rajssq/ai-code-combat/issues"
+  },
+  "homepage": "https://github.com/rajssq/ai-code-combat#readme",
+  "dependencies": {
+    "@slack/bolt": "^4.5.0",
+    "dotenv": "^17.2.3"
+  }
+}
