@@ -24,7 +24,7 @@ async function handleSchedule({ command, ack, client }) {
               action_id: "time_select",
               initial_time: "10:00",
             },
-            label: { type: "plain_text", text: "Horário do huddle" },
+            label: { type: "plain_text", text: "Horário" },
           },
           {
             type: "input",
@@ -43,15 +43,18 @@ async function handleSchedule({ command, ack, client }) {
             element: {
               type: "plain_text_input",
               action_id: "message_input",
-              placeholder: { type: "plain_text", text: "Ex: Daily standup" },
+              placeholder: {
+                type: "plain_text",
+                text: "Mensagem opcional",
+              },
             },
-            label: { type: "plain_text", text: "Mensagem (opcional)" },
+            label: { type: "plain_text", text: "Descrição" },
           },
         ],
       },
     });
   } catch (error) {
-    console.error("Erro ao abrir modal:", error);
+    console.error("Erro ao abrir modal de agendamento:", error.message);
   }
 }
 
@@ -61,26 +64,50 @@ async function handleSchedule({ command, ack, client }) {
 async function handleScheduleSubmit({ ack, body, view, client }) {
   await ack();
 
-  const values = view.state.values;
-  const time = values.huddle_time.time_select.selected_time;
-  const channel = values.huddle_channel.channel_select.selected_channel;
-  const message =
-    values.huddle_message.message_input.value || "Hora do huddle!";
+  try {
+    const values = view.state.values;
+    const time = values.huddle_time.time_select.selected_time;
+    const channel = values.huddle_channel.channel_select.selected_channel;
+    const message =
+      values.huddle_message.message_input.value || "Hora do huddle";
 
-  const scheduleId = Date.now().toString();
-  huddleSchedules.set(scheduleId, {
-    time,
-    channel,
-    message,
-    userId: body.user.id,
-  });
+    const scheduleId = Date.now().toString();
+    huddleSchedules.set(scheduleId, {
+      time,
+      channel,
+      message,
+      userId: body.user.id,
+    });
 
-  console.log("📅 Huddle agendado:", { time, channel, message });
+    console.log(`Huddle agendado: ${time} em ${channel}`);
 
-  await client.chat.postMessage({
-    channel: body.user.id,
-    text: `✅ Huddle agendado para ${time} no canal <#${channel}>!\n> ${message}`,
-  });
+    await client.chat.postMessage({
+      channel: body.user.id,
+      text: `Huddle agendado para ${time} no canal <#${channel}>`,
+      blocks: [
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: `*Agendamento criado*\n${time} • <#${channel}>`,
+          },
+        },
+        {
+          type: "context",
+          elements: [{ type: "mrkdwn", text: message }],
+        },
+      ],
+    });
+  } catch (error) {
+    console.error("Erro ao processar agendamento:", error.message);
+
+    await client.chat
+      .postMessage({
+        channel: body.user.id,
+        text: "Não foi possível criar o agendamento. Tente novamente.",
+      })
+      .catch(() => {});
+  }
 }
 
 module.exports = { handleSchedule, handleScheduleSubmit };

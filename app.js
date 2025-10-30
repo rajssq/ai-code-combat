@@ -11,7 +11,7 @@ const {
 const {
   handleAppHome,
   handleHomeActions,
-  handleLanguageChange, // NOVO
+  handleLanguageChange,
 } = require("./src/views/appHome");
 
 // Registrar eventos
@@ -35,5 +35,5 @@ app.action("change_language", handleLanguageChange); // NOVO
 (async () => {
   const port = process.env.PORT || 3000;
   await app.start(port);
-  console.log(`⚡️ Huddle Notifier rodando na porta ${port}!`);
+  console.log(`🎧 Huddle Notifier rodando na porta ${port}!`);
 })();

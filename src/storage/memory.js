@@ -4,12 +4,12 @@ const huddleSchedules = new Map();
 const userHuddleStates = new Map();
 const channelConfigs = new Map();
 const huddleChannels = new Map();
-const userLanguagePreferences = new Map(); // NOVO: preferências de idioma
+const userLanguagePreferences = new Map();
 
 module.exports = {
   huddleSchedules,
   userHuddleStates,
   channelConfigs,
   huddleChannels,
-  userLanguagePreferences, // NOVO
+  userLanguagePreferences,
 };

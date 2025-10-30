@@ -13,10 +13,10 @@ async function handleConfig({ command, ack, client }) {
 
     const blocks = [
       {
-        type: "section",
+        type: "header",
         text: {
-          type: "mrkdwn",
-          text: "*⚙️ Configurações do Huddle Notifier*",
+          type: "plain_text",
+          text: "Configurações",
         },
       },
       { type: "divider" },
@@ -24,25 +24,28 @@ async function handleConfig({ command, ack, client }) {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `*📺 Canais com notificações:* ${configuredChannels.length}`,
+          text: `*Canais com notificações*\n${configuredChannels.length} ${
+            configuredChannels.length === 1 ? "canal" : "canais"
+          }`,
         },
       },
     ];
 
     if (configuredChannels.length > 0) {
-      configuredChannels.forEach((channelId) => {
-        blocks.push({
-          type: "section",
-          text: { type: "mrkdwn", text: `• <#${channelId}>` },
-        });
+      const channelList = configuredChannels.map((id) => `<#${id}>`).join(", ");
+      blocks.push({
+        type: "context",
+        elements: [{ type: "mrkdwn", text: channelList }],
       });
     } else {
       blocks.push({
-        type: "section",
-        text: {
-          type: "mrkdwn",
-          text: "_Nenhum canal configurado. Use `/huddle-setup` para ativar._",
-        },
+        type: "context",
+        elements: [
+          {
+            type: "mrkdwn",
+            text: "Nenhum canal configurado. Use `/huddle-setup` para ativar.",
+          },
+        ],
       });
     }
 
@@ -53,26 +56,35 @@ async function handleConfig({ command, ack, client }) {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: "_Nenhum huddle agendado. Use `/huddle-schedule` para criar._",
+          text: `*Huddles agendados*\nNenhum agendamento ativo`,
         },
+      });
+      blocks.push({
+        type: "context",
+        elements: [
+          {
+            type: "mrkdwn",
+            text: "Use `/huddle-schedule` para criar agendamentos.",
+          },
+        ],
       });
     } else {
       blocks.push({
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `*📅 Huddles agendados:* ${schedules.length}`,
+          text: `*Huddles agendados*\n${schedules.length} ${
+            schedules.length === 1 ? "agendamento" : "agendamentos"
+          }`,
         },
       });
 
-      schedules.forEach((schedule, index) => {
+      schedules.forEach((schedule) => {
         blocks.push({
           type: "section",
           text: {
             type: "mrkdwn",
-            text: `${index + 1}. *${schedule.time}* - <#${
-              schedule.channel
-            }>\n> ${schedule.message}`,
+            text: `${schedule.time} • <#${schedule.channel}>\n${schedule.message}`,
           },
         });
       });
@@ -81,10 +93,19 @@ async function handleConfig({ command, ack, client }) {
     await client.chat.postEphemeral({
       channel: command.channel_id,
       user: command.user_id,
-      blocks: blocks,
+      blocks,
+      text: "Configurações do Huddle Notifier",
     });
   } catch (error) {
-    console.error("Erro no comando config:", error);
+    console.error("Erro ao exibir configurações:", error.message);
+
+    await client.chat
+      .postEphemeral({
+        channel: command.channel_id,
+        user: command.user_id,
+        text: "Não foi possível carregar as configurações. Tente novamente.",
+      })
+      .catch(() => {});
   }
 }
 
