@@ -8,48 +8,79 @@ async function handleSetup({ command, ack, client }) {
   await ack();
 
   const channelId = command.channel_id;
+  const userId = command.user_id;
   const isConfigured = channelConfigs.has(channelId);
+
+  console.log(
+    `${isConfigured ? "Desativando" : "Ativando"} notificações em ${channelId}`
+  );
 
   try {
     if (isConfigured) {
-      // Desativar notificações
       channelConfigs.delete(channelId);
-      console.log(`❌ Notificações desativadas no canal ${channelId}`);
 
       await client.chat.postEphemeral({
         channel: channelId,
-        user: command.user_id,
-        text: `❌ Notificações desativadas.\n\nPara reativar, use \`/huddle-setup\` novamente.`,
-      });
-    } else {
-      // Ativar notificações
-      channelConfigs.set(channelId, {
-        activatedBy: command.user_id,
-        activatedAt: Date.now(),
-      });
-      console.log(`✅ Notificações ativadas no canal ${channelId}`);
-
-      await client.chat.postMessage({
-        channel: channelId,
-        text: `✅ *Notificações de huddle ativadas!*\n\nTodos os membros serão notificados quando alguém iniciar um huddle. 🎙️`,
+        user: userId,
+        text: "Notificações desativadas",
         blocks: [
           {
             type: "section",
             text: {
               type: "mrkdwn",
-              text: `✅ *Notificações ativadas!*\n\nQuando alguém iniciar um huddle neste canal, todos os membros serão notificados.\n\n💡 _Para desativar, use_ \`/huddle-setup\` _novamente._`,
+              text: "*Notificações desativadas*\nMembros não serão mais notificados sobre huddles neste canal.",
             },
+          },
+          {
+            type: "context",
+            elements: [
+              {
+                type: "mrkdwn",
+                text: "Para reativar, use `/huddle-setup` novamente.",
+              },
+            ],
+          },
+        ],
+      });
+    } else {
+      channelConfigs.set(channelId, {
+        activatedBy: userId,
+        activatedAt: Date.now(),
+      });
+
+      await client.chat.postMessage({
+        channel: channelId,
+        text: "Notificações de huddle ativadas",
+        blocks: [
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: "*Notificações ativadas*\nTodos os membros serão notificados quando alguém iniciar um huddle neste canal.",
+            },
+          },
+          {
+            type: "context",
+            elements: [
+              {
+                type: "mrkdwn",
+                text: "Para desativar, use `/huddle-setup` novamente.",
+              },
+            ],
           },
         ],
       });
     }
   } catch (error) {
-    console.error("Erro no comando setup:", error);
-    await client.chat.postEphemeral({
-      channel: channelId,
-      user: command.user_id,
-      text: `❌ Erro ao configurar. Tente novamente.`,
-    });
+    console.error("Erro ao configurar canal:", error.message);
+
+    await client.chat
+      .postEphemeral({
+        channel: channelId,
+        user: userId,
+        text: "Não foi possível alterar a configuração. Verifique as permissões do bot.",
+      })
+      .catch(() => {});
   }
 }
 
