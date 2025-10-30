@@ -1,32 +1,40 @@
-// Funções auxiliares para envio de notificações
-
 /**
  * Envia notificação pública no canal
  */
 async function sendChannelNotification(client, channelId, userId) {
   return await client.chat.postMessage({
     channel: channelId,
-    text: `🎙️ <!channel> *Huddle iniciado!*\n<@${userId}> iniciou um huddle. Clique no ícone de fone de ouvido 🎧 para participar!`,
+    text: `Huddle iniciado por <@${userId}>`,
     blocks: [
       {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `🎙️ *Huddle iniciado neste canal!*\n\n<@${userId}> acabou de iniciar um huddle.\n\n👉 *Como participar:*\nClique no ícone de fone de ouvido 🎧 no canto superior direito do canal.`,
+          text: `*Huddle Iniciado*\n<@${userId}> iniciou um huddle neste canal.`,
         },
-      },
-      {
-        type: "divider",
+        accessory: {
+          type: "button",
+          text: {
+            type: "plain_text",
+            text: "Participar",
+          },
+          style: "primary",
+          value: "join_huddle",
+          action_id: "join_huddle_button",
+        },
       },
       {
         type: "context",
         elements: [
           {
             type: "mrkdwn",
-            text: `⏰ ${new Date().toLocaleTimeString("pt-BR", {
-              hour: "2-digit",
-              minute: "2-digit",
-            })}`,
+            text: `Clique no ícone de fone no cabeçalho do canal para entrar • ${new Date().toLocaleTimeString(
+              "pt-BR",
+              {
+                hour: "2-digit",
+                minute: "2-digit",
+              }
+            )}`,
           },
         ],
       },
@@ -42,14 +50,13 @@ async function sendChannelNotification(client, channelId, userId) {
 async function sendMemberDM(client, memberId, channelId, userId, teamId) {
   return await client.chat.postMessage({
     channel: memberId,
-    text: `🎙️ Huddle iniciado em <#${channelId}>! <@${userId}> está te chamando para participar.`,
+    text: `<@${userId}> iniciou um huddle em <#${channelId}>`,
     blocks: [
       {
         type: "header",
         text: {
           type: "plain_text",
-          text: "🎙️ Huddle Iniciado!",
-          emoji: true,
+          text: "Huddle em Andamento",
         },
       },
       {
@@ -63,7 +70,7 @@ async function sendMemberDM(client, memberId, channelId, userId, teamId) {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `💡 *Como entrar:*\n1. Abra o canal <#${channelId}>\n2. Clique no ícone de fone 🎧 no canto superior`,
+          text: "*Acesso Rápido:*\nClique no botão abaixo para abrir o canal e participar.",
         },
       },
       {
@@ -73,8 +80,7 @@ async function sendMemberDM(client, memberId, channelId, userId, teamId) {
             type: "button",
             text: {
               type: "plain_text",
-              text: "🎧 Ir para o canal",
-              emoji: true,
+              text: "Abrir Canal",
             },
             url: `slack://channel?team=${teamId}&id=${channelId}`,
             style: "primary",
@@ -86,7 +92,7 @@ async function sendMemberDM(client, memberId, channelId, userId, teamId) {
         elements: [
           {
             type: "mrkdwn",
-            text: `⏰ ${new Date().toLocaleTimeString("pt-BR", {
+            text: `Iniciado às ${new Date().toLocaleTimeString("pt-BR", {
               hour: "2-digit",
               minute: "2-digit",
             })}`,
@@ -110,7 +116,7 @@ async function notifyChannelMembers(client, channelId, userId, teamId) {
 
     // 1. Notificação no canal
     await sendChannelNotification(client, channelId, userId);
-    console.log(`✅ Mensagem enviada para o canal ${channelId}`);
+    console.log(`✅ Notificação enviada no canal ${channelId}`);
 
     // 2. DMs individuais (exceto para quem iniciou e bots)
     const memberCount = members.members.length;
