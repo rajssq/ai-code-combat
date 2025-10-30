@@ -12,16 +12,6 @@ async function sendChannelNotification(client, channelId, userId) {
           type: "mrkdwn",
           text: `*Huddle Iniciado*\n<@${userId}> iniciou um huddle neste canal.`,
         },
-        accessory: {
-          type: "button",
-          text: {
-            type: "plain_text",
-            text: "Participar",
-          },
-          style: "primary",
-          value: "join_huddle",
-          action_id: "join_huddle_button",
-        },
       },
       {
         type: "context",
