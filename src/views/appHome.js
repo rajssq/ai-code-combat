@@ -81,12 +81,6 @@ async function handleAppHome({ event, client }) {
               type: "mrkdwn",
               text: `*${t.appTitle}*\n${t.appSubtitle}`,
             },
-            accessory: {
-              type: "image",
-              image_url:
-                "https://api.slack.com/img/blocks/bkb_template_images/notifications.png",
-              alt_text: "huddle icon",
-            },
           },
           { type: "divider" },
 
