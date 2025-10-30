@@ -4,13 +4,13 @@
 async function sendChannelNotification(client, channelId, userId) {
   return await client.chat.postMessage({
     channel: channelId,
-    text: `Huddle iniciado por <@${userId}>`,
+    text: ` 🎧 Huddle iniciado por <@${userId}>`,
     blocks: [
       {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `*Huddle Iniciado*\n<@${userId}> iniciou um huddle neste canal.`,
+          text: `* 🎧 Huddle Iniciado*\n<@${userId}> iniciou um huddle neste canal.`,
         },
       },
       {
@@ -53,7 +53,7 @@ async function sendMemberDM(client, memberId, channelId, userId, teamId) {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `<@${userId}> iniciou um huddle em <#${channelId}>`,
+          text: ` 🎧 <@${userId}> iniciou um huddle em <#${channelId}>`,
         },
       },
       {

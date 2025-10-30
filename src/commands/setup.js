@@ -22,13 +22,13 @@ async function handleSetup({ command, ack, client }) {
       await client.chat.postEphemeral({
         channel: channelId,
         user: userId,
-        text: "Notificações desativadas",
+        text: " 🔕 Notificações desativadas",
         blocks: [
           {
             type: "section",
             text: {
               type: "mrkdwn",
-              text: "*Notificações desativadas*\nMembros não serão mais notificados sobre huddles neste canal.",
+              text: "* 🔕 Notificações desativadas*\nMembros não serão mais notificados sobre huddles neste canal.",
             },
           },
           {
@@ -50,13 +50,13 @@ async function handleSetup({ command, ack, client }) {
 
       await client.chat.postMessage({
         channel: channelId,
-        text: "Notificações de huddle ativadas",
+        text: " 🔔 Notificações de huddle ativadas",
         blocks: [
           {
             type: "section",
             text: {
               type: "mrkdwn",
-              text: "*Notificações ativadas*\nTodos os membros serão notificados quando alguém iniciar um huddle neste canal.",
+              text: "* 🔔 Notificações ativadas*\nTodos os membros serão notificados quando alguém iniciar um huddle neste canal.",
             },
           },
           {
