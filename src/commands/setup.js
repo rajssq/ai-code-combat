@@ -5,6 +5,9 @@ const { channelConfigs } = require("../storage/memory");
  * Ativa/desativa notificações de huddle no canal
  */
 async function handleSetup({ command, ack, client }) {
+  console.log("🎯 Comando /huddle-setup recebido!");
+  console.log("Channel:", command.channel_id);
+  console.log("User:", command.user_id);
   await ack();
 
   const channelId = command.channel_id;

@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const app = require("./src/config/app");
 const handleHuddleChanged = require("./src/events/huddleChanged");
 const handleSetup = require("./src/commands/setup");
