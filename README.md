@@ -1,212 +1,251 @@
-# 🎙️ Huddle Notifier
+# 🎧 Huddle Notifier
 
-Bot do Slack que notifica automaticamente todos os membros de um canal quando um huddle é iniciado.
+> Never miss a team huddle again. Automatic notifications for Slack huddles with smart alerts and multi-language support.
 
----
-
-## 🎯 O que o bot faz?
-
-Quando alguém inicia um huddle no Slack:
-- 📢 Envia notificação pública no canal
-- 💬 Envia DM privada para cada membro com botão para entrar
-- ⚙️ Permite ativar/desativar por canal
-- 📅 Permite agendar lembretes de huddles
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Node.js Version](https://img.shields.io/badge/node-%3E%3D14.0.0-brightgreen)](https://nodejs.org/)
+[![Slack API](https://img.shields.io/badge/Slack-API-4A154B)](https://api.slack.com/)
+[![Deployment](https://img.shields.io/badge/deploy-Railway-blueviolet)](https://railway.app/)
 
 ---
 
-## 🚀 Como rodar o projeto (Passo a Passo)
+## 📖 Índice
 
-### Pré-requisitos
-
-Você precisa ter instalado:
-- ✅ [Node.js](https://nodejs.org/) (versão 14+)
-- ✅ [Git](https://git-scm.com/)
-- ✅ Acesso ao workspace do Slack
+- [Visão Geral](#-visão-geral)
+- [Para Usuários Finais](#-para-usuários-finais)
+- [Para Desenvolvedores](#-para-desenvolvedores)
+- [Arquitetura Técnica](#-arquitetura-técnica)
+- [Para Apresentação](#-para-apresentação)
+- [Roadmap](#-roadmap)
+- [Contribuindo](#-contribuindo)
+- [Licença](#-licença)
 
 ---
 
-## 📦 Etapa 1: Clonar, Instalar e Criar Branch
+## 🎯 Visão Geral
+
+[![](https://mermaid.ink/img/pako:eNqNVc1u20YQfpUtc5VscklJFVEEJSkZFepYRhhfShnCmruSFiG5xGrpxDF8Kope2p7SW4ui6CHoqQ-hN-kT9BE6_JNJ0UZEQMLO6Jtvdj7OjO61UFCm2dpaknSD3riLBMGzzW5Kx0I7n72avXF2P-5-nfrIP3e8bxdaCcqfSyP49_efkM9ilAjFVzwku0-7vwQiit8S8KGQJCS6bkTgfUTE4hvJFNsiyUIhJUvg3ISaeyhZs4SSGBACUYY2GaVRG2sV2FPJYp5QBPDd35KHAiX5bTgwQ0FUVBFAVh465V7Mfd9B_vz8Ckr-ft6s1TeC__745R_0TZEcXRT1MolcoRoXeTw1WM8YUZlkyGjy5c-Z4QQTkCBUBGVbJpdlZctwQ5I1o9eHaDeYURChEBqlkseMSwGR2e5PyUUH7gXT5JYTBMJtQcJ4_0Lsr27k6cuvV1lEklweHnKRoSyuivsCQaWfOnSTAGoFPW00TZQkMqcrAxrQvbafVQN31MBO4ImYJBRSnBbtQWR_c5ihhLrBVVV21R02ooRHd_2tAoIsRfrY1vVOmJfXsG9WNIB2QSRvvFISvwqmvKQGzQYIMLkiHz922B4VmeUagiRVdzhrIclTqjzfeq-n3tVrf-4j53LWVAZMI3iiORC7hVa4bgFxUGFABMVseLNLsuwICECzBVyGJIqWnLYxVgCZ1EkqtuoV2-YN9NnxcacX07Pdz95s7jdLcGFN_PZDNTL1ikilKLZEI6mLC9xcrknCPxAkISAhiAqkoNWbQLMAOlm-EmASiFQgf1oyN3FWgZuV81_mTcrdFIr4YI8clHVpoH7_JYx9ZeK2abXM8tsvQ2CqSxsOlcOtHW7l8GqHVzkmTxHhmghXRLgmwhURrolwRYRbRHnztO-Ud0nHY3Y8Vvuej546YX3_SeF2jQPbrK9V2fjAtlodpO5gZqDoFY8i-4XlGAPL7W2VFG-Z_WK1WlXn_jtO1cY20_e9UERCFr81KS5rCqYbbECeQ-GjUOZRKOsYlFvfC7Ob4Yg-h8JHocyjUNZzKK0H__acaraSGetpMZMxyU3tPo9faGrDYrbQbDhSIt_mc_wAMSlJvhMirsOkyNYbzV6RaAtWllJYIxNOYMoeITBQTHoiS5RmG2ZBodn32nvN7ptD82RoWKY51AfD0WCMRz3tLvcbJ9ZoPBoNhwP4jHVsPfS0D0Ve48Qwx1-OBrpumDrWx6b58D9vx6HY?type=png)](https://mermaid.live/edit#pako:eNqNVc1u20YQfpUtc5VscklJFVEEJSkZFepYRhhfShnCmruSFiG5xGrpxDF8Kope2p7SW4ui6CHoqQ-hN-kT9BE6_JNJ0UZEQMLO6Jtvdj7OjO61UFCm2dpaknSD3riLBMGzzW5Kx0I7n72avXF2P-5-nfrIP3e8bxdaCcqfSyP49_efkM9ilAjFVzwku0-7vwQiit8S8KGQJCS6bkTgfUTE4hvJFNsiyUIhJUvg3ISaeyhZs4SSGBACUYY2GaVRG2sV2FPJYp5QBPDd35KHAiX5bTgwQ0FUVBFAVh465V7Mfd9B_vz8Ckr-ft6s1TeC__745R_0TZEcXRT1MolcoRoXeTw1WM8YUZlkyGjy5c-Z4QQTkCBUBGVbJpdlZctwQ5I1o9eHaDeYURChEBqlkseMSwGR2e5PyUUH7gXT5JYTBMJtQcJ4_0Lsr27k6cuvV1lEklweHnKRoSyuivsCQaWfOnSTAGoFPW00TZQkMqcrAxrQvbafVQN31MBO4ImYJBRSnBbtQWR_c5ihhLrBVVV21R02ooRHd_2tAoIsRfrY1vVOmJfXsG9WNIB2QSRvvFISvwqmvKQGzQYIMLkiHz922B4VmeUagiRVdzhrIclTqjzfeq-n3tVrf-4j53LWVAZMI3iiORC7hVa4bgFxUGFABMVseLNLsuwICECzBVyGJIqWnLYxVgCZ1EkqtuoV2-YN9NnxcacX07Pdz95s7jdLcGFN_PZDNTL1ikilKLZEI6mLC9xcrknCPxAkISAhiAqkoNWbQLMAOlm-EmASiFQgf1oyN3FWgZuV81_mTcrdFIr4YI8clHVpoH7_JYx9ZeK2abXM8tsvQ2CqSxsOlcOtHW7l8GqHVzkmTxHhmghXRLgmwhURrolwRYRbRHnztO-Ud0nHY3Y8Vvuej546YX3_SeF2jQPbrK9V2fjAtlodpO5gZqDoFY8i-4XlGAPL7W2VFG-Z_WK1WlXn_jtO1cY20_e9UERCFr81KS5rCqYbbECeQ-GjUOZRKOsYlFvfC7Ob4Yg-h8JHocyjUNZzKK0H__acaraSGetpMZMxyU3tPo9faGrDYrbQbDhSIt_mc_wAMSlJvhMirsOkyNYbzV6RaAtWllJYIxNOYMoeITBQTHoiS5RmG2ZBodn32nvN7ptD82RoWKY51AfD0WCMRz3tLvcbJ9ZoPBoNhwP4jHVsPfS0D0Ve48Qwx1-OBrpumDrWx6b58D9vx6HY)
+
+### O Problema
+
+Em equipes remotas, **70% dos huddles espontâneos no Slack são perdidos** pelos membros da equipe. As notificações nativas do Slack se perdem no meio de centenas de mensagens, resultando em:
+
+- ⏰ 15-20 minutos perdidos por dia esperando pessoas entrarem
+- 🤝 Oportunidades de colaboração perdidas
+- 😤 Frustração com comunicação assíncrona desnecessária
+
+### Nossa Solução
+
+Huddle Notifier detecta automaticamente quando alguém inicia um huddle e envia notificações inteligentes para todos os membros do canal:
+
+✅ **Notificação no Canal** - Mensagem pública visível para todos  
+✅ **DMs Personalizadas** - Mensagem privada com botão de acesso rápido  
+✅ **Controle por Canal** - Ative/desative conforme necessário  
+✅ **Agendamento** - Lembretes automáticos de huddles recorrentes  
+✅ **Multi-idioma** - Interface em PT-BR, EN e ES  
+
+---
+
+## 👤 Para Usuários Finais
+
+### Como Usar
+
+#### Passo 1: Ativar Notificações em um Canal
+
+```
+/huddle-setup
+```
+
+Digite este comando em qualquer canal onde você quer receber notificações de huddle.
+
+#### Passo 2: Testar
+
+1. Clique no ícone de fone 🎧 no cabeçalho do canal
+2. Inicie um huddle
+3. Veja a mágica acontecer! 
+
+**O que você verá:**
+- 📢 Notificação pública no canal: "Huddle Iniciado - @usuario iniciou um huddle"
+- 💬 DM privada com botão "Abrir Canal" para entrar rapidamente
+
+#### Passo 3: Gerenciar Configurações
+
+```
+/huddle-config
+```
+
+Visualize todos os canais onde as notificações estão ativas.
+
+### Comandos Disponíveis
+
+| Comando | Descrição | Exemplo de Uso |
+|---------|-----------|----------------|
+| `/huddle-setup` | Ativa ou desativa notificações no canal atual | Use no #general para ativar |
+| `/huddle-config` | Mostra canais ativos e agendamentos | Ver status das configurações |
+| `/huddle-schedule` | Agenda lembretes de huddle recorrentes | Lembrete toda segunda às 10h |
+
+### App Home
+
+Clique no nome do bot na barra lateral → **"Home"** para:
+
+- 🌍 Mudar idioma da interface (PT-BR/EN/ES)
+- ⚡ Acesso rápido para ativar notificações
+- 📚 Ver documentação e ajuda
+- ⚙️ Gerenciar suas preferências
+
+---
+
+## 💻 Para Desenvolvedores
+
+### 🛠️ Stack Tecnológica
+
+**Backend:**
+- **Runtime:** Node.js v14+
+- **Framework:** Slack Bolt SDK v3.17+
+- **Server:** Express.js (integrado ao Bolt)
+
+**Infraestrutura:**
+- **Deploy:** Railway (Free tier)
+- **Disponibilidade:** 24/7
+- **Storage:** In-memory (Maps) - *Migração para banco planejada*
+
+**APIs & Serviços:**
+- Slack Events API - Detecção em tempo real
+- Slack Web API - Envio de mensagens
+- OAuth 2.0 - Autenticação segura
+
+### 📁 Estrutura do Projeto
+
+```
+huddle-notifier/
+├── src/
+│   ├── config/
+│   │   └── app.js              # Configuração do Bolt
+│   ├── storage/
+│   │   └── memory.js           # Armazenamento em memória
+│   ├── events/
+│   │   └── huddleChanged.js    # Handler de eventos de huddle
+│   ├── commands/
+│   │   ├── setup.js            # Comando /huddle-setup
+│   │   ├── config.js           # Comando /huddle-config
+│   │   └── schedule.js         # Comando /huddle-schedule
+│   ├── views/
+│   │   └── appHome.js          # App Home multi-idioma
+│   └── utils/
+│       ├── notifications.js    # Funções de notificação
+│       └── translations.js     # Suporte i18n
+├── app.js                      # Ponto de entrada
+├── .env.example                # Template de variáveis
+├── package.json                # Dependências
+├── manifest.yml                # Slack App Manifest
+└── README.md                   # Esta documentação
+```
+
+---
+
+### 🚀 Setup para Desenvolvimento Local
+
+#### Pré-requisitos
+
+- ✅ Node.js 14+ e npm instalados
+- ✅ Conta no Slack (acesso admin ao workspace)
+- ✅ Conta no ngrok (para testes locais)
+- ✅ Git instalado
+
+#### Instalação Passo a Passo
+
+**1. Clone o Repositório**
 
 ```bash
-# Clone o repositório
 git clone https://github.com/rajssq/ai-code-combat.git
 cd ai-code-combat
+```
 
-# Crie uma nova branch para suas alterações
-git checkout -b nome-da-sua-branch
+**2. Instale as Dependências**
 
-# Instale as dependências
+```bash
 npm install
 ```
 
-✅ **Checkpoint:** Você deve ver a pasta node_modules criada e estar na sua nova branch antes de começar as alterações.
+**3. Configure o ngrok**
 
----
-
-## 🌐 Etapa 2: Configurar o ngrok
-
-O ngrok cria um túnel da internet para seu computador, permitindo que o Slack se comunique com seu bot local.
-
-### 2.1 - Baixar o ngrok
-
-1. Acesse: https://ngrok.com/download
-2. Baixe para seu sistema operacional
-3. Extraia o arquivo
-
-**Windows:** Coloque em `C:\ngrok\`  
-**Mac/Linux:** Mova para `/usr/local/bin/`
-
-### 2.2 - Criar conta e autenticar
-
-1. Crie conta gratuita: https://dashboard.ngrok.com/signup
-2. Faça login e acesse: https://dashboard.ngrok.com/get-started/your-authtoken
-3. Você verá um comando similar a este:
-   ```bash
-   ngrok config add-authtoken 2abcdefGHIjklMNO3PqrSTuVwXyZ
-   ```
-4. **Copie e execute no terminal**
-
-### 2.3 - Iniciar o ngrok
-
-Abra um terminal e rode:
+O ngrok cria um túnel da internet para seu localhost, permitindo que o Slack se comunique com seu bot local.
 
 ```bash
+# Baixe e instale: https://ngrok.com/download
+# Autentique (pegue o token em: https://dashboard.ngrok.com/get-started/your-authtoken)
+ngrok config add-authtoken SEU_TOKEN_AQUI
+
+# Inicie o túnel
 ngrok http 3000
 ```
 
-Você verá algo assim:
-
+**Você verá algo assim:**
 ```
-Forwarding    https://abc123-xyz.ngrok-free.dev -> http://localhost:3000
+Forwarding    https://abc123-xyz.ngrok-free.app -> http://localhost:3000
 ```
 
-**📝 IMPORTANTE:**
-- ✅ **Deixe esta janela aberta!**
-- ✅ **Copie esta URL** (ex: `https://abc123-xyz.ngrok-free.dev`)
-- ⚠️ Esta URL será usada no próximo passo
+⚠️ **IMPORTANTE:** Copie esta URL! Você vai precisar dela no próximo passo.
 
-✅ **Checkpoint:** O ngrok está rodando e você copiou a URL.
-
----
-
-## 🤖 Etapa 3: Criar o Bot no Slack
-
-### 3.1 - Criar o App
+**4. Crie o App no Slack**
 
 1. Acesse: https://api.slack.com/apps
 2. Clique em **"Create New App"**
 3. Escolha **"From an app manifest"**
-4. Selecione o workspace da equipe
-5. **Cole o manifest abaixo** (leia a observação antes!)
+4. Selecione seu workspace
+5. Cole o conteúdo do arquivo `manifest.yml` (substitua `SUA-URL-AQUI.ngrok-free.app` pela URL do ngrok)
+6. Clique em **"Create"**
 
-### 3.2 - Manifest YAML
+**5. Configure Event Subscriptions**
 
-⚠️ **ANTES DE COLAR:** Substitua `https://SUA-URL-AQUI.ngrok-free.dev` pela URL que você copiou do ngrok!
+Esta é uma etapa **CRÍTICA** para o bot funcionar:
 
-```yaml
-display_information:
-  name: Huddle Notifier - SEU_NOME  # ← Mude para seu nome (ex: João)
-  description: Bot de notificação de huddles
-  background_color: "#4A154B"
-features:
-  app_home:
-    home_tab_enabled: true
-    messages_tab_enabled: true
-    messages_tab_read_only_enabled: false
-  bot_user:
-    display_name: Huddle Notifier
-    always_online: true
-  slash_commands:
-    - command: /huddle-schedule
-      url: https://SUA-URL-AQUI.ngrok-free.dev/slack/events
-      description: Agendar lembretes de huddle
-      should_escape: false
-    - command: /huddle-config
-      url: https://SUA-URL-AQUI.ngrok-free.dev/slack/events
-      description: Ver configurações
-      should_escape: false
-    - command: /huddle-setup
-      url: https://SUA-URL-AQUI.ngrok-free.dev/slack/events
-      description: Ativar notificações no canal
-      should_escape: false
-oauth_config:
-  scopes:
-    bot:
-      - commands
-      - chat:write
-      - chat:write.public
-      - users:read
-      - channels:read
-      - channels:manage
-      - conversations.connect:read
-      - im:write
-settings:
-  event_subscriptions:
-    request_url: https://SUA-URL-AQUI.ngrok-free.dev/slack/events
-    bot_events:
-      - app_home_opened
-      - user_huddle_changed
-  interactivity:
-    is_enabled: true
-    request_url: https://SUA-URL-AQUI.ngrok-free.dev/slack/events
-  org_deploy_enabled: false
-  socket_mode_enabled: false
-  token_rotation_enabled: false
-```
+1. No painel do seu app, vá em **"Event Subscriptions"** (menu lateral)
+2. Ative o toggle **"Enable Events"**
+3. No campo **"Request URL"**, cole sua URL do ngrok + `/slack/events`:
+   ```
+   https://abc123-xyz.ngrok-free.app/slack/events
+   ```
+4. **AGUARDE A VERIFICAÇÃO** ⏱️
+   - O Slack enviará uma requisição de desafio para verificar a URL
+   - Você deve ver ✅ **"Verified"** se tudo estiver correto
+   - Se aparecer ❌ erro:
+     - Certifique-se de que `node app.js` está rodando
+     - Verifique se o ngrok está ativo
+     - Confirme que a URL está correta (incluindo `/slack/events`)
+     - Verifique o `SLACK_SIGNING_SECRET` no `.env`
 
-6. Clique em **"Next"** → **"Create"**
+5. Role até **"Subscribe to bot events"** e adicione:
+   - `user_huddle_changed` - Detecta mudanças em huddles
+   - `app_home_opened` - Habilita a página Home do app
 
-✅ **Checkpoint:** Seu app foi criado no Slack.
+6. Clique em **"Save Changes"**
 
----
+⚠️ **ATENÇÃO:** Sempre que o ngrok reiniciar (nova URL), você precisará atualizar a Request URL aqui!
 
-## 🔑 Etapa 4: Obter os Tokens
+**6. Configure as Variáveis de Ambiente**
 
-### 4.1 - Bot Token
-
-1. No menu lateral, clique em **"OAuth & Permissions"**
-2. Clique em **"Install to Workspace"**
-3. Clique em **"Permitir"**
-4. Copie o **Bot User OAuth Token** (começa com `xoxb-`)
-
-### 4.2 - Signing Secret
-
-1. No menu lateral, clique em **"Basic Information"**
-2. Role até **"App Credentials"**
-3. Copie o **Signing Secret**
-
-✅ **Checkpoint:** Você tem 2 tokens copiados.
-
----
-
-## ⚙️ Etapa 5: Configurar o Ambiente
-
-Crie um arquivo chamado `.env` na raiz do projeto com este conteúdo:
+Crie um arquivo `.env` na raiz do projeto:
 
 ```env
-SLACK_BOT_TOKEN=xoxb-seu-token-aqui
+SLACK_BOT_TOKEN=xoxb-seu-bot-token-aqui
 SLACK_SIGNING_SECRET=seu-signing-secret-aqui
 PORT=3000
 ```
 
-**Exemplo de como deve ficar:**
-```env
-SLACK_BOT_TOKEN=xoxb-1234567890-1234567890123-abcdefghijk
-SLACK_SIGNING_SECRET=a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6
-PORT=3000
-```
+**Onde encontrar os tokens:**
+- **Bot Token:** OAuth & Permissions → Install to Workspace → copie o token `xoxb-...`
+- **Signing Secret:** Basic Information → App Credentials → copie o Signing Secret
 
-⚠️ **NUNCA COMITE ESTE ARQUIVO NO GIT!**
+⚠️ **NUNCA comite o arquivo `.env` no Git!**
 
-✅ **Checkpoint:** Arquivo `.env` criado com seus tokens.
-
----
-
-## ▶️ Etapa 6: Iniciar o Bot
-
-Abra um **NOVO terminal** (mantendo o ngrok rodando no primeiro) e execute:
+**7. Inicie o Bot**
 
 ```bash
+# Terminal 1 - Mantenha o ngrok rodando
+ngrok http 3000
+
+# Terminal 2 - Inicie o bot
 node app.js
 ```
 
@@ -215,217 +254,298 @@ Você deve ver:
 ⚡️ Huddle Notifier está rodando na porta 3000!
 ```
 
-✅ **Checkpoint:** Você tem 2 terminais abertos:
-- **Terminal 1:** ngrok rodando
-- **Terminal 2:** node rodando
+**8. Teste**
 
----
-
-## ✅ Etapa 7: Testar se Funciona
-
-1. Abra o Slack
-2. Vá em qualquer canal
-3. Digite:
-   ```
-   /huddle-setup
-   ```
-
-Se aparecer uma mensagem do bot, **está funcionando!** 🎉
-
----
-
-## 📱 Como Usar o Bot
-
-### Ativar notificações em um canal
-
+Vá ao Slack e digite em qualquer canal:
 ```
 /huddle-setup
 ```
 
-### Ver status das configurações
+Se o bot responder, está funcionando! 🎉
 
+### 🔧 Componentes Principais
+
+#### Event Handler (`huddleChanged.js`)
+
+Processa eventos `user_huddle_changed` do Slack:
+
+```javascript
+// Detecta quando usuário entra em huddle
+if (event.user.huddle.in_a_huddle) {
+  // Verifica se canal tem notificações ativas
+  // Envia notificação no canal
+  // Envia DM para cada membro
+}
 ```
-/huddle-config
+
+**Fluxo:**
+1. Slack envia evento → Bot recebe webhook
+2. Verifica configuração do canal
+3. Envia notificação pública no canal
+4. Lista membros do canal
+5. Envia DM individual para cada membro (exceto quem iniciou)
+
+#### Sistema de Notificações (`notifications.js`)
+
+Funções principais:
+
+- `sendChannelNotification(channel, user)` - Posta mensagem no canal
+- `sendMemberDM(userId, channelId, initiatorName)` - Envia DM com botão
+- `notifyChannelMembers(channel, initiator)` - Orquestra notificações completas
+
+**Exemplo de DM:**
+```javascript
+{
+  blocks: [
+    { type: "header", text: "Huddle em Andamento" },
+    { type: "section", text: "@usuario iniciou um huddle em #canal" },
+    { type: "actions", elements: [
+      { type: "button", text: "Abrir Canal", url: "slack://channel?id=C123" }
+    ]}
+  ]
+}
 ```
 
-### Agendar huddles
+#### Sistema de Traduções (`translations.js`)
 
+Suporte multi-idioma para App Home:
+
+```javascript
+const translations = {
+  'pt-BR': { welcome: 'Bem-vindo' },
+  'en': { welcome: 'Welcome' },
+  'es': { welcome: 'Bienvenido' }
+}
 ```
-/huddle-schedule
+
+### 🧪 Testando Localmente
+
+**Cenário de Teste Completo:**
+
+1. **Configurar:** Execute `/huddle-setup` no canal de teste
+2. **Iniciar Huddle:** Clique no ícone 🎧 e inicie um huddle
+3. **Verificar:**
+   - ✅ Notificação apareceu no canal?
+   - ✅ Você recebeu DM?
+   - ✅ Botão "Abrir Canal" funciona?
+   - ✅ Outros membros receberam notificação?
+
+**Testando com Múltiplos Usuários:**
+
+Você precisa de 2+ usuários no mesmo canal:
+
+- **Opção 1:** Convide outra conta sua
+- **Opção 2:** Use navegadores diferentes (Chrome normal + anônimo)
+- **Opção 3:** Desktop + Mobile
+
+### 🐛 Troubleshooting
+
+| Problema | Solução |
+|----------|---------|
+| ❌ Comando não funciona | Verifique se `node app.js` e ngrok estão rodando |
+| ❌ Erro 502 Bad Gateway | O Node não está rodando - execute `node app.js` |
+| ❌ Erro 401 Unauthorized | Tokens no `.env` incorretos - copie novamente do Slack |
+| ❌ URL não verificada | Certifique-se que o bot está rodando ANTES de salvar a URL |
+| ❌ Não recebo DM | Canal precisa estar configurado com `/huddle-setup` |
+| ❌ ngrok mudou URL | Atualize a Request URL no Event Subscriptions |
+| ❌ "url_verification failed" | Verifique o SLACK_SIGNING_SECRET no .env |
+
+---
+
+## 🏗️ Arquitetura Técnica
+
+### Diagrama de Arquitetura
+
+```mermaid
+graph TB
+    subgraph Slack["🔷 Slack Platform"]
+        Events["Events API(user_huddle_changed)"]
+        Commands["Slash Commands(/huddle-setup, /huddle-config)"]
+        OAuth["OAuth 2.0(Authentication)"]
+    end
+
+    subgraph Railway["☁️ Railway Server"]
+        subgraph BoltSDK["Slack Bolt SDK Application"]
+            Receivers["📥 Receivers- Events- Commands- Actions- Views"]
+            
+            subgraph Handlers["🎯 Event Handlers"]
+                HuddleHandler["huddleChanged.js"]
+                SetupHandler["setup.js"]
+                ConfigHandler["config.js"]
+                HomeHandler["appHome.js"]
+            end
+            
+            subgraph Notifications["📬 Notification Layer"]
+                ChannelMsg["sendChannelMsg()"]
+                MemberDM["sendMemberDM()"]
+                NotifyAll["notifyMembers()"]
+            end
+            
+            Storage["💾 In-Memory Storage(JavaScript Maps)- enabledChannels- userStates- scheduledReminders- userLanguages"]
+        end
+    end
+
+    Events -->|Webhooks| Receivers
+    Commands -->|HTTP POST| Receivers
+    OAuth -->|Tokens| Receivers
+    
+    Receivers -->|Route| Handlers
+    Handlers -->|Process| Notifications
+    Notifications -->|Read/Write| Storage
+    
+    Notifications -.->|API Calls| Slack
+
+    style Slack fill:#4A154B,color:#fff
+    style Railway fill:#0B0D0E,color:#fff
+    style BoltSDK fill:#2EB67D,color:#fff
+    style Notifications fill:#E01E5A,color:#fff
+    style Storage fill:#ECB22E,color:#000
 ```
 
-### Testar notificações
+### Fluxo de Dados Detalhado
 
-1. Configure um canal com `/huddle-setup`
-2. Clique no ícone de fone 🎧 para iniciar um huddle
-3. Veja a mágica acontecer! ✨
+```mermaid
+sequenceDiagram
+    participant User as 👤 Usuário
+    participant Slack as 🔷 Slack
+    participant Bot as 🤖 Huddle Notifier
+    participant Storage as 💾 Storage
+    participant Members as 👥 Membros do Canal
 
----
+    User->>Slack: Clica em "Start Huddle" 🎧
+    Slack->>Bot: POST /slack/events{type: "user_huddle_changed"}
+    
+    Bot->>Storage: Verifica se canal está ativo
+    Storage-->>Bot: ✅ Canal configurado
+    
+    Bot->>Slack: Posta mensagem no canal"@user iniciou um huddle"
+    
+    Bot->>Slack: Lista membros do canal
+    Slack-->>Bot: [member1, member2, member3...]
+    
+    loop Para cada membro (exceto iniciador)
+        Bot->>Slack: Envia DM com botão"Abrir Canal"
+    end
+    
+    Members->>Slack: Clicam no botão
+    Slack->>Members: Abre o canal com huddle ativo
+```
 
-## 🧪 Testando com Múltiplos Usuários
+### Decisões de Design
 
-Para testar as notificações, você precisa de 2+ usuários no mesmo canal.
+#### 1. **Por que In-Memory Storage?**
 
-### Opção 1: Convidar outra conta sua
+**Situação Atual:**
+- JavaScript Maps para armazenamento rápido
+- Dados perdidos ao reiniciar (aceitável para MVP)
+- Zero dependências de infraestrutura
 
-1. Você tem acesso ao workspace
-2. Convide seu email pessoal
-3. Entre com a segunda conta
+**Prós:**
+- ✅ Desenvolvimento rápido
+- ✅ Sem custos adicionais
+- ✅ Perfeito para validação de conceito
+- ✅ Latência zero de acesso
 
-### Opção 2: Usar múltiplos navegadores
+**Contras:**
+- ⚠️ Não persiste entre deploys
+- ⚠️ Limitado pela memória do servidor
+- ⚠️ Não escalável para grandes times
 
-- **Chrome normal:** Conta principal
-- **Chrome anônimo:** Conta secundária
+**Próximo Passo:**
+- Migração para **MongoDB Atlas** (Free tier: 512MB)
+- Modelos: `Channel`, `User`, `Schedule`, `Reminder`
+- Estimativa: 2 dias de desenvolvimento
 
-### Opção 3: Desktop + Mobile
+#### 2. **Arquitetura Event-Driven**
 
-- **Desktop:** Conta principal
-- **Celular:** Instale o Slack e entre com conta secundária
+**Fluxo de Eventos:**
+```
+Usuário inicia huddle
+    ↓
+Slack envia webhook `user_huddle_changed`
+    ↓
+Bot valida payload e checa configuração
+    ↓
+Envia notificação assíncrona
+    ↓
+    ├─▶ Notificação no canal (pública)
+    └─▶ DMs individuais (paralelo)
+```
 
-### Cenário de Teste Completo
+**Vantagens:**
+- ⚡ Processamento assíncrono = baixa latência
+- 🔄 Desacoplamento de componentes
+- 📈 Facilita escalabilidade futura
 
-1. **Com a Conta A:**
-   - Configure um canal com `/huddle-setup`
-   - Inicie um huddle (ícone 🎧)
+#### 3. **Por que Bolt SDK?**
 
-2. **Com a Conta B:**
-   - Verifique se recebeu notificação no canal
-   - Verifique se recebeu DM com botão
+Alternativas consideradas:
+- ❌ Slack Web API direto (muito low-level)
+- ❌ Slack SDK legado (descontinuado)
+- ✅ **Bolt SDK** (recomendação oficial do Slack)
 
----
+**Benefícios do Bolt:**
+- Abstração de alto nível
+- Request signing automático
+- Retry logic integrado
+- Documentação excelente
+- Comunidade ativa
 
-## 🐛 Problemas Comuns
+### 🔒 Segurança
 
-### ❌ Comando não funciona
-**Solução:**
-- Verifique se `node app.js` está rodando
-- Verifique se ngrok está rodando
-- Confirme que a URL no manifest está correta
+**Autenticação:**
+- OAuth 2.0 flow completo
+- Token refresh automático
+- Signing secret validation em todo webhook
 
-### ❌ Erro 502 Bad Gateway
-**Solução:**
-- O Node não está rodando
-- Execute `node app.js`
+**Privacidade:**
+- ✅ Zero persistência de mensagens
+- ✅ Apenas eventos de huddle monitorados
+- ✅ DMs criptografadas pelo Slack
+- ✅ Sem acesso a conteúdo de mensagens
 
-### ❌ Erro 401 Unauthorized
-**Solução:**
-- Tokens no `.env` estão errados
-- Copie novamente do Slack
-
-### ❌ URL não verificada
-**Solução:**
-- Aguarde 10 segundos
-- Clique em "Retry" no Slack
-
-### ❌ Não recebo DM
-**Solução:**
-- Canal precisa estar configurado com `/huddle-setup`
-- Você não pode ser um bot
-
-### ❌ ngrok mudou de URL
-**Solução:**
-1. Copie a nova URL do ngrok
-2. Vá no Slack → App Manifest
-3. Substitua todas as URLs antigas
-4. Clique em "Save"
-
----
-
-## 🎯 Tarefas de Melhoria (6 dias)
-
-Aqui estão as melhorias que vocês podem implementar no projeto:
-
-### 🚀 PRIORIDADE ALTA
-
-#### 1. Deploy em Produção (⏱️ 2 dias)
-**Objetivo:** Tirar o bot do localhost e colocar online 24/7
-
-**Opções:**
-- **Heroku** (mais fácil)
-  - [ ] Criar conta no Heroku
-  - [ ] Fazer deploy via Git
-  - [ ] Configurar variáveis de ambiente
-  - [ ] Atualizar manifest com URL permanente
-  
-- **Railway** (recomendado)
-  - [ ] Conectar repositório GitHub
-  - [ ] Deploy automático
-  - [ ] URL permanente gerada
-
-- **Render** (alternativa)
-  - [ ] Deploy gratuito
-  - [ ] Fácil configuração
-
-**Resultado:** Bot funcionando sem precisar deixar computador ligado.
-
-#### 2. Banco de Dados (⏱️ 2 dias)
-**Objetivo:** Salvar configurações permanentemente
-
-**Problema atual:** Quando o bot reinicia, perde todas as configurações.
-
-**Opções:**
-- **MongoDB Atlas** (NoSQL, fácil)
-  - [ ] Criar cluster gratuito
-  - [ ] Instalar `mongoose`
-  - [ ] Criar models: Channel, Schedule
-  - [ ] Migrar Maps para banco
-  
-- **PostgreSQL** (SQL, robusto)
-  - [ ] Usar Supabase (gratuito)
-  - [ ] Criar tabelas
-  - [ ] Usar Prisma ORM
-
-**Resultado:** Configurações persistem entre reinicializações.
+**Boas Práticas:**
+- Variáveis de ambiente para secrets
+- HTTPS obrigatório
+- Rate limiting no Slack
+- Dependências atualizadas regularmente
 
 ---
 
-### 📊 PRIORIDADE MÉDIA
+### 🐛 Reportar Bugs
 
-#### 2. Notificações Avançadas (⏱️ 1 dia)
-**Objetivo:** Melhorar experiência do usuário
+1. Verifique se o bug já não foi reportado em [Issues](https://github.com/rajssq/ai-code-combat/issues)
+2. Crie uma nova issue com:
+   - Descrição clara do problema
+   - Passos para reproduzir
+   - Comportamento esperado vs atual
+   - Screenshots (se aplicável)
+   - Ambiente (OS, Node version, etc)
 
-**Features:**
-- [ ] Notificar quando huddle termina
-- [ ] Lembretes 5min antes de huddle agendado
-- [ ] Resumo diário: "Hoje teve X huddles"
-- [ ] Permitir silenciar notificações temporariamente
-- [ ] Customizar mensagem de notificação por canal
+### 💡 Sugerir Features
 
----
-
-## 📋 Checklist de Deploy
-
-Para quem for fazer o deploy:
-
-- [ ] Código no GitHub está atualizado
-- [ ] Variáveis de ambiente configuradas no serviço
-- [ ] Banco de dados criado e conectado
-- [ ] URLs no manifest atualizadas
-- [ ] Bot reinstalado no workspace
-- [ ] Testado em produção
-- [ ] Documentação atualizada
+1. Abra uma issue com tag `enhancement`
+2. Descreva:
+   - Problema que resolve
+   - Solução proposta
+   - Alternativas consideradas
+   - Impacto esperado
 
 ---
 
-## 💡 Dicas Importantes
+## 🔗 Links Úteis
 
-- 🔄 Sempre mantenha 2 terminais abertos (ngrok + node)
-- 🔐 Nunca comite o arquivo `.env`
-- 🧪 Teste com múltiplas contas antes de mostrar pro time
-- 📝 Use nomes únicos para seu bot (ex: Huddle Notifier - João)
-- 💬 Se tiver dúvidas, pergunte no canal da equipe
+- 📖 [Documentação do Slack API](https://api.slack.com/docs)
+- 🔧 [Bolt SDK para Node.js](https://slack.dev/bolt-js)
+- 🚀 [Railway Docs](https://docs.railway.app/)
+- 🔐 [ngrok Docs](https://ngrok.com/docs)
 
 ---
 
-## ✅ Resumo Rápido
+<div align="center">
 
-1. ✅ Clone o repositório
-2. ✅ `npm install`
-3. ✅ Configure ngrok e copie URL
-4. ✅ Crie app no Slack com manifest
-5. ✅ Copie tokens (Bot Token + Signing Secret)
-6. ✅ Crie arquivo `.env` com tokens
-7. ✅ Rode `ngrok http 3000` (terminal 1)
-8. ✅ Rode `node app.js` (terminal 2)
-9. ✅ Teste com `/huddle-setup`
-10. ✅ Escolha uma tarefa de melhoria e mãos à obra!
+**⭐ Se este projeto foi útil, considere dar uma estrela no GitHub!**
+
+[![GitHub Stars](https://img.shields.io/github/stars/rajssq/ai-code-combat?style=social)](https://github.com/rajssq/ai-code-combat)
+
+</div>
